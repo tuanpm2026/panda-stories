@@ -18,7 +18,7 @@ HTML = r"""<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Truyện Panda & Paw Patrol</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -53,7 +53,7 @@ HTML = r"""<!DOCTYPE html>
     box-shadow:0 8px 40px rgba(0,0,0,.6); animation:fadeIn .6s ease; }
   @keyframes fadeIn { from{opacity:0;transform:scale(.985);} to{opacity:1;transform:scale(1);} }
 
-  .tapzone { position:fixed; top:0; bottom:120px; width:28%; z-index:5; cursor:pointer; }
+  .tapzone { position:absolute; top:0; bottom:0; width:28%; z-index:5; cursor:pointer; }
   #tapPrev { left:0; } #tapNext { right:0; }
 
   #caption { position:fixed; left:50%; transform:translateX(-50%); bottom:86px;
@@ -112,6 +112,25 @@ HTML = r"""<!DOCTYPE html>
   .toggle input:checked + .slider::before { transform:translateX(21px); }
   #autoNextCountdown { color:#ffd9b3; font-size:clamp(14px,2.4vmin,18px); min-height:1.5em;
     font-weight:600; text-align:center; }
+
+  /* On phones, keep the artwork and narration in separate regions. */
+  @media (max-width:700px) {
+    #reader.active { display:flex; flex-direction:column; height:100vh; height:100dvh;
+      padding:56px 0 calc(72px + env(safe-area-inset-bottom)); }
+    #stage { position:relative; inset:auto; flex:1 1 auto; min-height:0; width:100%; padding:0 8px 8px; }
+    #stage img { max-height:100%; max-width:100%; }
+    #caption { position:relative; left:auto; bottom:auto; transform:none; flex:0 1 auto;
+      width:100%; max-width:none; max-height:clamp(190px,33dvh,320px);
+      padding:16px 18px 20px; border-radius:16px 16px 0 0;
+      background:#292333; color:#fffaf2; font-size:18px; line-height:1.55;
+      -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+    #bar { height:calc(72px + env(safe-area-inset-bottom));
+      padding:0 8px env(safe-area-inset-bottom); gap:clamp(4px,1.5vw,10px);
+      background:#1a1423; }
+    #bar button { width:42px; height:42px; font-size:18px; flex:0 0 auto; }
+    #btnPlay { width:52px !important; height:52px !important; font-size:22px !important; }
+    #pageNum { min-width:64px; font-size:14px; }
+  }
 </style>
 </head>
 <body>
@@ -127,10 +146,12 @@ HTML = r"""<!DOCTYPE html>
 
 <!-- ============ READER VIEW ============ -->
 <div id="reader" class="show-caption">
-  <div id="stage"><img id="slideImg" alt="trang truyện"></div>
-  <div id="tapPrev" class="tapzone"></div>
-  <div id="tapNext" class="tapzone"></div>
-  <div id="caption"></div>
+  <div id="stage">
+    <img id="slideImg" alt="trang truyện">
+    <div id="tapPrev" class="tapzone"></div>
+    <div id="tapNext" class="tapzone"></div>
+  </div>
+  <div id="caption" role="region" aria-label="Lời kể" tabindex="0"></div>
   <div id="dots"></div>
   <button id="btnHome">‹ Thư viện</button>
   <div id="bar">
