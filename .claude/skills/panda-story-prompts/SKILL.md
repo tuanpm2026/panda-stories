@@ -94,7 +94,7 @@ You are generating an AI image-generation plan for a children's storybook in the
 | Panda | **bé trai (boy), 5.5 tuổi, ~110 cm** — nhân vật chính, **người thật, KHÔNG phải gấu trúc** | **he / him / his** | `Characters/Panda.png` |
 | Mother (Mẹ) | nữ, 165 cm | she / her | `Characters/mother.png` |
 | Father (Bố) | nam, 168 cm | he / him | `Characters/father.png` |
-| Ryder, Chase, Marshall, Skye, Rubble, Rocky, Zuma | đội hình mở đầu — xem `Characters/CHARACTERS.md` | he/she theo CHARACTERS.md | `Characters/<tên>.png` — chưa có ref riêng |
+| Ryder, Chase, Marshall, Skye, Rubble, Rocky, Zuma | đội hình mở đầu — xem `Characters/CHARACTERS.md` | he/she theo CHARACTERS.md | `Characters/<tên>.png` |
 
 **🚨 CRITICAL GUARDRAIL:** Panda là **bé trai người thật**. NEVER "girl / daughter / she / her", NEVER a panda bear. Always "little human boy / he / him / his / son". Double-check every prompt before writing.
 

@@ -31,21 +31,23 @@ Mỗi nhân vật nên có file ref PNG cùng tên trong thư mục này.
 
 ## 🐶 Đội hình mở đầu — Ryder và 6 cún gốc
 
-Chỉ đưa nhóm này vào danh bạ mặc định; mỗi truyện chọn vài nhân vật phù hợp với cốt truyện, không bắt buộc đủ cả đội. Danh sách dựa trên [character guide chính thức](https://www.pawpatrol.com/character-guide) và [bộ 7 nhân vật chính của Spin Master](https://shop.spinmaster.com/products/paw-patrol-rescue-wheels-figure-7-pack-6071045). Ảnh ref riêng cho từng nhân vật **chưa được tạo/chọn**; mô tả dưới đây là hồ sơ nội dung ban đầu, cần đối chiếu ảnh chính thức trước khi chốt chi tiết ngoại hình, huy hiệu và pup pack.
+Chỉ đưa nhóm này vào danh bạ mặc định; mỗi truyện chọn vài nhân vật phù hợp với cốt truyện, không bắt buộc đủ cả đội. Danh sách dựa trên [character guide chính thức](https://www.pawpatrol.com/character-guide) và [bộ 7 nhân vật chính của Spin Master](https://shop.spinmaster.com/products/paw-patrol-rescue-wheels-figure-7-pack-6071045). Đã tạo sheet ref local cho cả bảy nhân vật. Đây là ảnh AI theo phong cách series, cần kiểm tra chi tiết trang phục, huy hiệu và pup pack khi dùng cho bản in cuối.
 
 | Nhân vật | Loại / giới tính | Vai trò, tính cách | Phương tiện chính | Ref |
 |---|---|---|---|---|
-| **Ryder** | bé trai 10 tuổi, he/him | Chỉ huy, phân công nhiệm vụ qua Pup Pad | ATV công nghệ cao | `Ryder.png` — chưa có |
-| **Chase** | cún German Shepherd, he/him | Cún cảnh sát, có tố chất lãnh đạo, làm việc theo quy trình | xe cảnh sát | `Chase.png` — chưa có |
-| **Marshall** | cún Dalmatian, he/him | Cún cứu hỏa, nhiệt tình, đôi khi vụng về | xe cứu hỏa | `Marshall.png` — chưa có |
-| **Skye** | cún Cockapoo, she/her | Phi công, dũng cảm, yêu động vật nhỏ | trực thăng | `Skye.png` — chưa có |
-| **Rubble** | cún Bulldog, he/him | Xây dựng, khỏe, vui tính | xe xúc | `Rubble.png` — chưa có |
-| **Rocky** | cún lai, he/him | Tái chế, sửa chữa, sáng tạo | xe tái chế | `Rocky.png` — chưa có |
-| **Zuma** | cún Chocolate Labrador, he/him | Cứu hộ dưới nước, vui vẻ | tàu đệm khí | `Zuma.png` — chưa có |
+| **Ryder** | bé trai 10 tuổi, he/him | Chỉ huy, phân công nhiệm vụ qua Pup Pad | ATV công nghệ cao | `Ryder.png` |
+| **Chase** | cún German Shepherd, he/him | Cún cảnh sát, có tố chất lãnh đạo, làm việc theo quy trình | xe cảnh sát | `Chase.png` |
+| **Marshall** | cún Dalmatian, he/him | Cún cứu hỏa, nhiệt tình, đôi khi vụng về | xe cứu hỏa | `Marshall.png` |
+| **Skye** | cún Cockapoo, she/her | Phi công, dũng cảm, yêu động vật nhỏ | trực thăng | `Skye.png` |
+| **Rubble** | cún Bulldog, he/him | Xây dựng, khỏe, vui tính | xe xúc | `Rubble.png` |
+| **Rocky** | cún lai, he/him | Tái chế, sửa chữa, sáng tạo | xe tái chế | `Rocky.png` |
+| **Zuma** | cún Chocolate Labrador, he/him | Cứu hộ dưới nước, vui vẻ | tàu đệm khí | `Zuma.png` |
 
 **Màu nhận diện cơ bản để viết truyện:** Chase xanh dương, Marshall đỏ, Skye hồng, Rubble vàng, Rocky xanh lá, Zuma cam. Đây là ký hiệu giúp phân biệt nhân vật, không thay thế ảnh ref chính thức. Ưu tiên phiên bản **series hoạt hình truyền hình** phù hợp ảnh nhân vật người user đã chọn cho gia đình Panda; không trộn trang phục phim điện ảnh, Mighty Pups hay các dòng đồ chơi đặc biệt vào cùng một bộ ref.
 
 **Nhân vật mở rộng khi truyện cần:** Everest, Tracker, Liberty; sau đó mới xét nhân vật khác. Chưa tự thêm vào prompt nếu truyện không nhắc tới.
+
+**Lưu ý QA:** trên sheet AI, huy hiệu và chi tiết nhỏ có thể đổi giữa các góc; đặc biệt mắt Skye được vẽ lớn hơn cún khác, và nón/vest Rocky cần đối chiếu nếu muốn giống tuyệt đối bản phim. Khi gen trang truyện, ưu tiên góc chính diện hoặc 3/4 trong sheet; không coi biểu tượng tự sinh là mẫu huy hiệu chuẩn tuyệt đối.
 
 Nguồn vai trò: [Chase](https://www.pawpatrol.com/characters/chase), [Marshall](https://www.pawpatrol.com/characters/marshall), [Skye](https://www.pawpatrol.com/characters/skye), [Rubble](https://www.pawpatrol.com/characters/rubble), [Rocky](https://www.pawpatrol.com/characters/rocky), [Zuma](https://www.pawpatrol.com/characters/zuma), [Ryder](https://www.pawpatrol.com/characters/ryder).
 
