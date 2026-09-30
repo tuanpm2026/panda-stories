@@ -113,17 +113,28 @@ HTML = r"""<!DOCTYPE html>
   #autoNextCountdown { color:#ffd9b3; font-size:clamp(14px,2.4vmin,18px); min-height:1.5em;
     font-weight:600; text-align:center; }
 
-  /* On phones, keep the artwork and narration in separate regions. */
-  @media (max-width:700px) {
+  /* Keep the artwork and narration in separate regions on touch-sized screens. */
+  @media (max-width:1100px) {
     #reader.active { display:flex; flex-direction:column; height:100vh; height:100dvh;
-      padding:56px 0 calc(72px + env(safe-area-inset-bottom)); }
+      padding:56px 0 calc(76px + env(safe-area-inset-bottom)); }
     #stage { position:relative; inset:auto; flex:1 1 auto; min-height:0; width:100%; padding:0 8px 8px; }
     #stage img { max-height:100%; max-width:100%; }
     #caption { position:relative; left:auto; bottom:auto; transform:none; flex:0 1 auto;
       width:100%; max-width:none; max-height:clamp(190px,33dvh,320px);
-      padding:16px 18px 20px; border-radius:16px 16px 0 0;
-      background:#292333; color:#fffaf2; font-size:18px; line-height:1.55;
+      padding:18px max(20px,calc((100vw - 720px)/2)) 20px; border-radius:16px 16px 0 0;
+      background:#292333; color:#fffaf2; font-size:20px; line-height:1.55;
       -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+    #bar { background:#1a1423; }
+  }
+  @media (min-width:701px) and (max-width:1100px) and (orientation:landscape) {
+    #reader.active { flex-direction:row; padding:56px 0 calc(76px + env(safe-area-inset-bottom)); }
+    #stage { width:55%; padding:0 12px; }
+    #caption { flex:1 1 45%; width:auto; max-height:none; min-height:0;
+      align-self:stretch; margin:0 16px 0 0; padding:20px 24px; border-radius:16px; }
+  }
+  @media (max-width:700px) {
+    #reader.active { padding-bottom:calc(72px + env(safe-area-inset-bottom)); }
+    #caption { padding:16px 18px 20px; font-size:18px; }
     #bar { height:calc(72px + env(safe-area-inset-bottom));
       padding:0 8px env(safe-area-inset-bottom); gap:clamp(4px,1.5vw,10px);
       background:#1a1423; }
