@@ -102,6 +102,8 @@ You are generating an AI image-generation plan for a children's storybook in the
 
 **Nguồn chuẩn:** [`Characters/CHARACTERS.md`](../../../Characters/CHARACTERS.md) — tên, loài/giống chó, giới tính, màu sắc, đồng phục, huy hiệu, xe, công cụ pup pack, tính cách.
 
+**Phong cách gia đình đã chốt:** `Characters/Panda.png`, `Characters/mother.png`, `Characters/father.png` (bản v2) là ref chính. Khi gen scene có người, mô tả rõ tạo hình 3D hoạt hình điện ảnh với mắt to biểu cảm, nét mặt cách điệu, da CGI mịn, màu bão hòa, ánh sáng viền; tránh photorealism và cảm giác ảnh chân dung/chụp catalog. Không dùng file `*-v1.png` làm ref.
+
 → Khi story dùng các nhân vật này: **đọc CHARACTERS.md, lấy mô tả + ref PNG, KHÔNG PAUSE hỏi user.** Viết "mô tả chốt" (Bước 2 của output) cho mỗi nhân vật và lặp lại nguyên trong mọi prompt liên quan.
 
 ## Workflow (must follow in order)

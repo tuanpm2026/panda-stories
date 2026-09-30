@@ -25,7 +25,7 @@ Mỗi nhân vật nên có file ref PNG cùng tên trong thư mục này.
 - **Chiều cao:** 168 cm · **Pronoun:** he / him · **Ref:** `father.png` — character sheet lưu local
 - **Ngoại hình / trang phục:** tóc đen cắt ngắn, vóc dáng chắc, gương mặt và nụ cười theo ảnh gia đình. Áo thun ngắn tay sọc ngang mảnh màu be-trắng như ảnh; quần dài xám than, giày thể thao xám-trắng.
 
-**Phong cách chung của ba người:** 3D hoạt hình điện ảnh, gương mặt nhận diện theo ảnh thật, hình khối mềm, màu sáng và biểu cảm thân thiện; dùng `Panda.png`, `mother.png`, `father.png` làm nguồn chuẩn trong mọi truyện. Khi cả nhà đứng cạnh nhau: Bố 168 cm, Mẹ 165 cm, Panda khoảng 110 cm.
+**Phong cách chung của ba người:** 3D hoạt hình điện ảnh rõ nét như bộ ref v2: mắt to biểu cảm, gương mặt và mũi được cách điệu bằng hình khối tròn mềm, da CGI mịn không có lỗ chân lông kiểu ảnh thật, màu bão hòa, ánh sáng viền điện ảnh, nền xanh nhạt trên character sheet. Vẫn giữ nhận diện khuôn mặt gia đình từ ảnh thật. Tránh photorealism, ảnh chân dung chỉnh màu, hoặc dáng catalog thời trang. Dùng `Panda.png`, `mother.png`, `father.png` làm nguồn chuẩn trong mọi truyện. Khi cả nhà đứng cạnh nhau: Bố 168 cm, Mẹ 165 cm, Panda khoảng 110 cm. Bản v1 được giữ local để so sánh nhưng không dùng làm ref chính.
 
 ---
 
