@@ -168,6 +168,42 @@ let cur = 0;
 let playing = false;       // chế độ tự động kể chuyện đang bật
 let advanceTimer = null;
 const audio = new Audio();
+let screenWakeLock = null;
+let wakeLockWanted = false;
+let wakeLockPending = false;
+
+async function keepScreenAwake() {
+  wakeLockWanted = true;
+  if (!navigator.wakeLock || document.visibilityState !== "visible" ||
+      screenWakeLock || wakeLockPending) return;
+  wakeLockPending = true;
+  try {
+    const lock = await navigator.wakeLock.request("screen");
+    if (!wakeLockWanted || document.visibilityState !== "visible") {
+      await lock.release();
+    } else {
+      screenWakeLock = lock;
+      lock.addEventListener("release", () => {
+        if (screenWakeLock === lock) screenWakeLock = null;
+      });
+    }
+  } catch (_) {
+    // The browser or device can refuse a wake lock; reading still works normally.
+  } finally {
+    wakeLockPending = false;
+  }
+}
+
+function allowScreenSleep() {
+  wakeLockWanted = false;
+  const lock = screenWakeLock;
+  screenWakeLock = null;
+  if (lock) lock.release().catch(() => {});
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && wakeLockWanted) keepScreenAwake();
+});
 
 // dots
 SLIDES.forEach((_, i) => {
@@ -191,6 +227,7 @@ function render() {
 
 function playCurrent() {
   clearTimeout(advanceTimer);
+  keepScreenAwake();
   audio.src = SLIDES[cur].audio;
   audio.play().catch(() => {});
   btnPlay.textContent = "⏸";
@@ -199,6 +236,7 @@ function playCurrent() {
 function stopAudio() {
   clearTimeout(advanceTimer);
   audio.pause();
+  allowScreenSleep();
   btnPlay.textContent = "▶";
 }
 
@@ -211,11 +249,12 @@ function go(i, manual) {
 }
 
 audio.addEventListener("ended", () => {
-  if (!playing) { btnPlay.textContent = "▶"; return; }
+  if (!playing) { allowScreenSleep(); btnPlay.textContent = "▶"; return; }
   if (cur + 1 < SLIDES.length) {
     advanceTimer = setTimeout(() => go(cur + 1), AUTO_ADVANCE_DELAY);
   } else {
     playing = false;
+    allowScreenSleep();
     btnPlay.textContent = "▶";
     endOverlay.classList.add("show");
   }
@@ -238,7 +277,7 @@ document.getElementById("btnCaption").addEventListener("click", () => document.b
 btnPlay.addEventListener("click", () => {
   if (audio.paused) {
     playing = true;
-    if (audio.src && !audio.ended) { audio.play(); btnPlay.textContent = "⏸"; }
+    if (audio.src && !audio.ended) { keepScreenAwake(); audio.play(); btnPlay.textContent = "⏸"; }
     else playCurrent();
   } else {
     playing = false;
