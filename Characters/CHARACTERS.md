@@ -11,19 +11,21 @@ Mỗi nhân vật nên có file ref PNG cùng tên trong thư mục này.
 - **Loại:** bé trai **người thật** — ⚠️ KHÔNG phải gấu trúc
 - **Tuổi / chiều cao:** 5.5 tuổi, ~110 cm, tỉ lệ bé mẫu giáo lớn (không chibi/toddler)
 - **Pronoun:** he / him / his
-- **Ref:** `Panda.png` — ⚠️ CHƯA CÓ
-- **Tóc:** [TODO]
-- **Trang phục cố định:** [TODO: màu áo, chữ/logo in trên áo, quần, giày]
-- **Đặc điểm nhận dạng:** [TODO: kính, răng khểnh, má lúm…]
+- **Ref:** `Panda.png` — character sheet tạo từ ảnh gia đình, lưu local
+- **Tóc:** đen, ngắn, để lộ tự nhiên; mũ lưỡi trai trong ảnh gốc không phải phụ kiện cố định
+- **Trang phục cố định:** áo phông trắng cổ viền xanh navy, in chữ cong và hình chú chó ở ngực; bên trong là áo dài tay sọc navy-trắng. Quần dài xanh navy, giày thể thao trắng-xanh navy. Khi gen chữ/hình trên áo, ưu tiên bám ảnh ref; chữ AI có thể sai, cần sửa hậu kỳ nếu cần in lớn.
+- **Đặc điểm nhận dạng:** gương mặt theo ảnh gia đình và `Panda.png`; mắt đen, nụ cười tươi
 - **Tính cách:** [TODO]
 
 ### Mẹ
-- **Pronoun:** she / her · **Ref:** `mother.png` — ⚠️ CHƯA CÓ
-- **Ngoại hình / trang phục:** [TODO]
+- **Chiều cao:** 165 cm · **Pronoun:** she / her · **Ref:** `mother.png` — character sheet lưu local
+- **Ngoại hình / trang phục:** tóc đen buộc thấp, gương mặt và nụ cười theo ảnh gia đình. Áo thun sọc ngang xanh navy-trắng như ảnh; quần dài xanh navy, giày thể thao trắng. Ảnh gốc có nhãn nhỏ trên áo; ảnh ref tạo ra không giữ chi tiết này.
 
 ### Bố
-- **Pronoun:** he / him · **Ref:** `father.png` — ⚠️ CHƯA CÓ
-- **Ngoại hình / trang phục:** [TODO]
+- **Chiều cao:** 168 cm · **Pronoun:** he / him · **Ref:** `father.png` — character sheet lưu local
+- **Ngoại hình / trang phục:** tóc đen cắt ngắn, vóc dáng chắc, gương mặt và nụ cười theo ảnh gia đình. Áo thun ngắn tay sọc ngang mảnh màu be-trắng như ảnh; quần dài xám than, giày thể thao xám-trắng.
+
+**Phong cách chung của ba người:** 3D hoạt hình điện ảnh, gương mặt nhận diện theo ảnh thật, hình khối mềm, màu sáng và biểu cảm thân thiện; dùng `Panda.png`, `mother.png`, `father.png` làm nguồn chuẩn trong mọi truyện. Khi cả nhà đứng cạnh nhau: Bố 168 cm, Mẹ 165 cm, Panda khoảng 110 cm.
 
 ---
 

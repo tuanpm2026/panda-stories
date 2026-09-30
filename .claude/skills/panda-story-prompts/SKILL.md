@@ -91,9 +91,9 @@ You are generating an AI image-generation plan for a children's storybook in the
 
 | Character | Giới tính / Loại | Pronoun (EN) | Ref file |
 |-----------|------------------|--------------|----------|
-| Panda | **bé trai (boy), 5.5 tuổi, ~110 cm** — nhân vật chính, **người thật, KHÔNG phải gấu trúc** | **he / him / his** | `Characters/Panda.png` **[chưa có]** |
-| Mother (Mẹ) | nữ **[CHỜ XÁC NHẬN]** | she / her | `Characters/mother.png` **[chưa có]** |
-| Father (Bố) | nam **[CHỜ XÁC NHẬN]** | he / him | `Characters/father.png` **[chưa có]** |
+| Panda | **bé trai (boy), 5.5 tuổi, ~110 cm** — nhân vật chính, **người thật, KHÔNG phải gấu trúc** | **he / him / his** | `Characters/Panda.png` |
+| Mother (Mẹ) | nữ, 165 cm | she / her | `Characters/mother.png` |
+| Father (Bố) | nam, 168 cm | he / him | `Characters/father.png` |
 | _Đội Paw Patrol_ | **[CHỜ user gửi thông tin]** — thêm vào `Characters/CHARACTERS.md` | he/she theo CHARACTERS.md | `Characters/<tên>.png` |
 
 **🚨 CRITICAL GUARDRAIL:** Panda là **bé trai người thật**. NEVER "girl / daughter / she / her", NEVER a panda bear. Always "little human boy / he / him / his / son". Double-check every prompt before writing.
