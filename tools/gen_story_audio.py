@@ -2,10 +2,11 @@
 """Gen audio mp3 cho slideshow truyện Panda từ narration.json bằng edge-tts.
 
 Usage:
-    ~/.venvs/edge-tts/bin/python tools/gen_story_audio.py Panda-story-5 [--force]
+    ~/.venvs/edge-tts/bin/python tools/gen_story_audio.py Panda-story-5 [--force] [--continue-on-error]
 
 Đọc <story-dir>/narration.json, gen từng slide ra <story-dir>/audio/*.mp3.
-Bỏ qua file đã tồn tại trừ khi có --force.
+Bỏ qua file đã tồn tại trừ khi có --force. --continue-on-error thử các slide
+sau nếu một slide bị dịch vụ từ chối tạm thời, rồi báo các file còn thiếu.
 """
 import asyncio
 import json
@@ -35,6 +36,7 @@ async def gen_one(text: str, voice: str, rate: str, out_path: Path, retries: int
 async def main() -> None:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     force = "--force" in sys.argv
+    continue_on_error = "--continue-on-error" in sys.argv
     if not args:
         sys.exit("Usage: gen_story_audio.py <story-dir> [--force]")
 
@@ -51,15 +53,24 @@ async def main() -> None:
     print(f"Story: {plan.get('title', story_dir.name)}")
     print(f"Voice: {voice}  rate: {rate}  slides: {len(slides)}")
 
+    failed = []
     for slide in slides:
         out_path = story_dir / slide["audio"]
         out_path.parent.mkdir(parents=True, exist_ok=True)
         if out_path.exists() and out_path.stat().st_size > 0 and not force:
             print(f"  - {out_path.name} đã có, bỏ qua")
             continue
-        await gen_one(slide["text"], voice, rate, out_path)
+        try:
+            await gen_one(slide["text"], voice, rate, out_path)
+        except Exception as exc:
+            if not continue_on_error:
+                raise
+            failed.append(out_path.name)
+            print(f"  ! {out_path.name} bỏ qua sau khi thử lại ({exc.__class__.__name__})")
         await asyncio.sleep(1.5)  # tránh throttle của dịch vụ Edge TTS
 
+    if failed:
+        sys.exit("Còn thiếu audio: " + ", ".join(failed))
     print("Xong.")
 
 

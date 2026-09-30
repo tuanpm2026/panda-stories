@@ -9,6 +9,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+TARGET_ASPECT_RATIO = 5 / 7
+# Image generation can vary slightly in canvas size; the reader is screen-first.
+SCREEN_ASPECT_TOLERANCE = 0.03
 
 
 def png_size(path: Path) -> tuple[int, int]:
@@ -71,7 +74,7 @@ def validate_story(folder: Path) -> list[str]:
             try:
                 if kind == "image":
                     width, height = png_size(path)
-                    if abs(width / height - 5 / 7) > 0.015:
+                    if abs(width / height - TARGET_ASPECT_RATIO) > SCREEN_ASPECT_TOLERANCE:
                         errors.append(f"wrong aspect ratio {name}: {width}x{height}")
                 elif audio_duration(path) <= 0:
                     errors.append(f"zero duration {name}")
