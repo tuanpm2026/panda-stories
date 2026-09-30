@@ -1,6 +1,6 @@
 ---
 name: panda-story-prompts
-description: Generate AI image-prompt plan for stories in the Panda-stories series (bé Panda + Paw Patrol universe). Auto-trigger when the user opens, references, edits, or pastes the content of a `content` file inside a `Panda-story-N/` folder (or asks to gen/tạo prompts/ảnh for such a story). Reads the plain-text story content, breaks it into 8-11 scenes, asks the user about any new side characters (gender, age, outfit), then writes `image-prompts-plan.md` next to the content file with: cover + scene prompts + infographic, character refs matrix, A5 portrait (--ar 5:7), Pixar-like 3D style. Output guide is Vietnamese, prompts are English. Skill is project-local for the Panda-stories series only.
+description: Generate AI image-prompt plan for stories in the Panda-stories series (bé Panda + Paw Patrol universe). Auto-trigger when the user opens, references, edits, or pastes the content of a `content` file inside a `Panda-story-N/` folder (or asks to gen/tạo prompts/ảnh for such a story). Reads the plain-text story content, breaks it into 8-11 scenes, asks the user about any new side characters (gender, age, outfit), then writes `image-prompts-plan.md` next to the content file with: cover + scene prompts + infographic, character refs matrix, A5 portrait (--ar 5:7), simplified television CGI style. Output guide is Vietnamese, prompts are English. Skill is project-local for the Panda-stories series only.
 ---
 
 # Panda Story → Image Prompts Plan
@@ -77,7 +77,7 @@ You are generating an AI image-generation plan for a children's storybook in the
     - **KHÔNG viết "Paw Patrol", "Nickelodeon", "Spin Master" trong prompt.** Chỉ dùng tên riêng nhân vật + **mô tả ngoại hình đầy đủ** + **ảnh ref**.
     - Mỗi plan kèm sẵn "câu style thay thế không thương hiệu" trong TIPS: thay `3D Pixar-style children's book illustration` bằng `cute stylized 3D-animated children's storybook illustration in an original art style (not imitating any specific studio or franchise)`; thay `art directed by Pixar` bằng `with the polished warmth of a high-end animated feature film`.
     - Thứ tự khi bị từ chối: (1) retry nguyên prompt 1 lần (guardrail stochastic) → (2) swap câu style → (3) bỏ tên riêng các cún, chỉ để mô tả ngoại hình → (4) bỏ tham số MJ (`--ar`, `--style raw`, `--no`), viết thành câu khẳng định (*"Vertical 5:7 portrait image"*).
-    - Giữ "3D Pixar-style" làm mặc định cho Midjourney/Flux; chỉ swap khi bị chặn.
+    - Dùng Style Bible mới ở mục Prompt construction rules; không quay lại "3D Pixar-style" vì sẽ lệch bộ ref gia đình.
 
 15. **SCENE CHIA TAY / DI CHUYỂN → KHOÁ HƯỚNG TỪNG NHÂN VẬT SO VỚI CAMERA.** Lỗi đã gặp: *"waves goodbye, looking back"* → AI vẽ ngược hướng. Với mọi scene chia tay, rời đi, đón chào, đi bộ:
     - Khoá **hướng di chuyển của cả nhóm so với camera**: *"the family is walking AWAY from X, TOWARD the camera"*.
@@ -102,7 +102,7 @@ You are generating an AI image-generation plan for a children's storybook in the
 
 **Nguồn chuẩn:** [`Characters/CHARACTERS.md`](../../../Characters/CHARACTERS.md) — tên, loài/giống chó, giới tính, màu sắc, đồng phục, huy hiệu, xe, công cụ pup pack, tính cách.
 
-**Phong cách gia đình đã chốt:** `Characters/Panda.png`, `Characters/mother.png`, `Characters/father.png` (bản v2) là ref chính. Khi gen scene có người, mô tả rõ tạo hình 3D hoạt hình điện ảnh với mắt to biểu cảm, nét mặt cách điệu, da CGI mịn, màu bão hòa, ánh sáng viền; tránh photorealism và cảm giác ảnh chân dung/chụp catalog. Không dùng file `*-v1.png` làm ref.
+**Phong cách gia đình hiện tại:** `Characters/Panda.png`, `Characters/mother.png`, `Characters/father.png` (bản v3) là ref chính. Nhân vật người theo kiểu 3D hoạt hình truyền hình đơn giản: mắt vừa phải, mặt/mũi cách điệu có góc cạnh nhẹ, tóc mảng lớn, tay chân khối giản lược, vật liệu mờ, ánh sáng dịu. Tránh cả photorealism lẫn vẻ bóng bẩy/mắt quá to của phim 3D điện ảnh. Không dùng file `*-v1.png` hoặc `*-v2.png` làm ref.
 
 → Khi story dùng các nhân vật này: **đọc CHARACTERS.md, lấy mô tả + ref PNG, KHÔNG PAUSE hỏi user.** Viết "mô tả chốt" (Bước 2 của output) cho mỗi nhân vật và lặp lại nguyên trong mọi prompt liên quan.
 
@@ -192,7 +192,7 @@ Summarize: scene count, characters used, nhân vật nào **chưa có ref**, fil
 - Nhân vật **đã có ref**: viết **"mô tả chốt"** (tiếng Anh) — với cún: giống chó, màu lông, vest, mũ, huy hiệu, pup pack, "dog paws, no human hands"; với xe: "no face on the vehicle".
 - Nhân vật **chưa có ref**: gen character sheet trước:
 \`\`\`
-Character sheet of <description>, front view, 3/4 view and side view, white background, consistent character design for children's book. 3D Pixar-style children's book illustration, soft cinematic lighting, warm vibrant colors, cute stylized proportions, high detail, friendly atmosphere, professional children's storybook art. --ar 1:1 --style raw
+Character sheet of <description>, front view, 3/4 view and side view, light aqua background, consistent character design for children's book. Simplified stylized 3D television-animation look matching the uploaded family reference sheets, modest expressive eyes, geometric facial forms, blocked hair shapes, matte clay-like materials, broad clean colors, soft even lighting, age-appropriate proportions, not photorealistic or glossy. --ar 1:1 --style raw
 \`\`\`
 
 ### Bước 3: Gen từng scene theo thứ tự
@@ -304,7 +304,7 @@ Each scene prompt is **one long English paragraph** containing these elements in
    > `[Names] must exactly match the uploaded reference images — same face, same outfit — Panda in his [outfit from CHARACTERS.md] clearly visible — same proportions[, same pup uniforms and badges].`
 
 7. **Style Bible** (verbatim, every prompt):
-   > `3D Pixar-style children's book illustration, soft cinematic lighting, warm vibrant colors, cute stylized proportions, high detail, friendly atmosphere, professional children's storybook art, A5 portrait page layout with safe margins for print, leave safe margins, no important details near edges.`
+   > `Simplified stylized 3D television-animation look matching the uploaded family character sheets: modest expressive eyes, geometric facial forms, blocked hair shapes, clean tubular limbs, matte clay-like materials, broad appealing colors, soft even lighting, age-appropriate proportions, not photorealistic or glossy, A5 portrait page layout with safe margins for print, no important details near edges.`
 
 8. **Suffix** (verbatim):
    - Có Panda + cún/xe: `--ar 5:7 --style raw --no speech bubbles, dialogue balloons, thought bubbles, captions, panda bear, bear ears, panda costume, human hands on dogs, humanoid dogs, faces on vehicles, watermark, signature`

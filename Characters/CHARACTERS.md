@@ -25,7 +25,7 @@ Mỗi nhân vật nên có file ref PNG cùng tên trong thư mục này.
 - **Chiều cao:** 168 cm · **Pronoun:** he / him · **Ref:** `father.png` — character sheet lưu local
 - **Ngoại hình / trang phục:** tóc đen cắt ngắn, vóc dáng chắc, gương mặt và nụ cười theo ảnh gia đình. Áo thun ngắn tay sọc ngang mảnh màu be-trắng như ảnh; quần dài xám than, giày thể thao xám-trắng.
 
-**Phong cách chung của ba người:** 3D hoạt hình điện ảnh rõ nét như bộ ref v2: mắt to biểu cảm, gương mặt và mũi được cách điệu bằng hình khối tròn mềm, da CGI mịn không có lỗ chân lông kiểu ảnh thật, màu bão hòa, ánh sáng viền điện ảnh, nền xanh nhạt trên character sheet. Vẫn giữ nhận diện khuôn mặt gia đình từ ảnh thật. Tránh photorealism, ảnh chân dung chỉnh màu, hoặc dáng catalog thời trang. Dùng `Panda.png`, `mother.png`, `father.png` làm nguồn chuẩn trong mọi truyện. Khi cả nhà đứng cạnh nhau: Bố 168 cm, Mẹ 165 cm, Panda khoảng 110 cm. Bản v1 được giữ local để so sánh nhưng không dùng làm ref chính.
+**Phong cách chung của ba người:** 3D hoạt hình truyền hình đơn giản theo mẫu nhân vật người mà user cung cấp: dáng hơi thanh và tay chân dạng khối đơn giản, mặt/mũi có góc cạnh nhẹ, mắt vừa phải, tóc thành các mảng lớn, chất liệu nhựa/đất sét mờ, màu phẳng và ánh sáng dịu. Tránh photorealism, mắt rất to kiểu phim 3D điện ảnh, da bóng/chi tiết lỗ chân lông, tóc tỉa từng sợi, ánh sáng viền rực và dáng catalog. Giữ nhận diện khuôn mặt gia đình từ ảnh thật. Dùng `Panda.png`, `mother.png`, `father.png` (bản v3) làm nguồn chuẩn trong mọi truyện; bản v1/v2 chỉ để so sánh local. Khi cả nhà đứng cạnh nhau: Bố 168 cm, Mẹ 165 cm, Panda khoảng 110 cm.
 
 ---
 
@@ -57,7 +57,7 @@ Mẫu cho mỗi nhân vật (copy khối này):
 Upload 1–2 ảnh chân dung thật của bé làm ref, rồi dùng:
 
 ```
-Character sheet of a little human boy named Panda (a real 5-and-a-half-year-old human child about 110 cm tall, NOT a panda bear, no animal ears), matching the face in the uploaded photo, [hair], wearing [outfit + printed wordmark], kindergarten-age proportions (not a toddler). Front view, 3/4 view and side view, full body, white background, consistent character design for children's book. 3D Pixar-style children's book illustration, soft cinematic lighting, warm vibrant colors, cute stylized proportions, high detail, friendly atmosphere, professional children's storybook art. --ar 1:1 --style raw --no panda bear, bear ears, panda costume, speech bubbles, watermark
+Character sheet of a little human boy named Panda (a real 5-and-a-half-year-old human child about 110 cm tall, NOT a panda bear, no animal ears), matching the face in the uploaded photo, [hair], wearing [outfit + printed wordmark], kindergarten-age proportions (not a toddler). Front view, 3/4 view and side view, full body, light aqua background, consistent character design for children's book. Simplified stylized 3D television-animation look matching the current family reference sheets: modest expressive eyes, geometric facial forms, blocked hair shapes, matte clay-like materials, soft even lighting, not photorealistic or glossy. --ar 1:1 --style raw --no panda bear, bear ears, panda costume, speech bubbles, watermark
 ```
 
 Gen ở quality low trước để chốt, ưng rồi mới gen bản đẹp.
