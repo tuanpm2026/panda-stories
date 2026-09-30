@@ -119,7 +119,7 @@ HTML = r"""<!DOCTYPE html>
       padding:56px 0 calc(76px + env(safe-area-inset-bottom)); }
     #stage { position:relative; inset:auto; flex:1 1 auto; min-height:0; width:100%; padding:0 8px 8px; }
     #stage img { max-height:100%; max-width:100%; }
-    #caption { position:relative; left:auto; bottom:auto; transform:none; flex:0 1 auto;
+    #caption { position:relative; left:auto; bottom:auto; transform:none; flex:0 0 auto;
       width:100%; max-width:none; max-height:clamp(190px,33dvh,320px);
       padding:18px max(20px,calc((100vw - 720px)/2)) 20px; border-radius:16px 16px 0 0;
       background:#292333; color:#fffaf2; font-size:20px; line-height:1.55;
