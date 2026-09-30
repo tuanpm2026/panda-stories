@@ -1,0 +1,21 @@
+# Original full-resolution assets — kept locally for printing, NOT deployed.
+# Leading slash anchors to repo root so docs/Panda-story-* stays tracked.
+/Panda-story-*/
+/*.zip
+/Characters/*
+!/Characters/CHARACTERS.md
+
+# Real child photos — kept LOCAL (privacy), never pushed
+/albums/
+/index.html
+
+# Secrets
+.env
+*.key
+
+# OS / editor
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
