@@ -5,7 +5,8 @@ Quy trình chuyển từ series `~/work/Shopee-robocar-stories` (Shopee + Roboca
 
 ## Nhân vật
 - **Panda: bé trai NGƯỜI THẬT, 5.5 tuổi, ~110 cm** — không phải gấu trúc. he/him.
-- Danh bạ nhân vật: `Characters/CHARACTERS.md` (còn TODO: trang phục Panda, bố mẹ, đội Paw Patrol).
+- Danh bạ nhân vật: `Characters/CHARACTERS.md`; ref gia đình và đội hình Paw Patrol gốc đã có local trong `Characters/`.
+- Kế hoạch 10 truyện ở `STORY_ROADMAP.md`; Bố và Mẹ có vai trò cụ thể trong 8/10 truyện (truyện 1 đã làm không có gia đình).
 
 ## Quy trình mỗi truyện
 1. `Panda-story-N/content` — dòng 1 `Bài học: <tên truyện>`, dòng 3 `Chủ đề: ...`, rồi nội dung, cuối là mục "Bài học cho bé".
