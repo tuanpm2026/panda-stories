@@ -326,8 +326,8 @@ function openStory(i) {
 
   document.getElementById("startCover").src = base + "/" + st.cover;
   document.getElementById("startTitle").textContent = st.title;
-  document.getElementById("startSub").innerHTML =
-    "Giọng kể: chị HoaiMy &nbsp;•&nbsp; " + (SLIDES.length - 1) + " trang";
+  document.getElementById("startSub").textContent =
+    "Giọng kể: " + st.voiceLabel + " • " + (SLIDES.length - 1) + " trang";
   endOverlay.classList.remove("show");
   startOverlay.classList.add("show");
   btnPlay.textContent = "▶";
@@ -487,6 +487,7 @@ def load_stories(narration_variant="edge"):
         stories.append({
             "n": int(m.group(1)),
             "title": data.get("title", "Truyện " + m.group(1)),
+            "voice_label": data.get("voice_label") or data.get("voice", "vi-VN-HoaiMyNeural").replace("vi-VN-", "").removesuffix("Neural"),
             "base": os.path.basename(d),
             "slides": slides,
         })
@@ -502,7 +503,7 @@ def write_html(stories, out_path, cover="cover.png", img_ext_map=None):
             image = img_ext_map(s["image"]) if img_ext_map else s["image"]
             slides.append({"image": image, "audio": s["audio"], "text": s["text"]})
         cov = img_ext_map(cover) if img_ext_map else cover
-        payload.append({"n": st["n"], "title": st["title"], "base": st["base"],
+        payload.append({"n": st["n"], "title": st["title"], "voiceLabel": st["voice_label"], "base": st["base"],
                         "cover": cov, "slides": slides})
     js = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     html = HTML.replace("__STORIES__", js)
