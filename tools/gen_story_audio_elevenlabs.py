@@ -2,6 +2,7 @@
 """Create a separate ElevenLabs trial; existing Edge audio stays intact.
 
 python3 tools/gen_story_audio_elevenlabs.py Panda-story-1 [--limit 1] [--dry-run]
+python3 tools/gen_story_audio_elevenlabs.py Panda-story-1 --model eleven_v4
 Credentials: ELEVENLABS_API_KEY and ELEVENLABS_VOICE_ID in repo .env or environment.
 Successful pages are reused. Paid requests are never automatically retried.
 """
@@ -19,7 +20,11 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent.parent
-MODEL = "eleven_flash_v2_5"
+MODEL = "eleven_v4"
+MODEL_CONFIG = {
+    "eleven_flash_v2_5": ("elevenlabs", "ElevenLabs · Flash v2.5", {"stability": 0.5, "similarity_boost": 0.75, "speed": 0.9}),
+    "eleven_v4": ("elevenlabs-v4", "ElevenLabs · v4 · tốc độ tự nhiên", {"stability": 0.5, "similarity_boost": 0.75}),
+}
 
 
 def credentials():
@@ -78,9 +83,11 @@ def duration(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("story_dir", type=Path)
+    parser.add_argument("--model", choices=tuple(MODEL_CONFIG), default=MODEL)
     parser.add_argument("--limit", type=int, help="Số trang đầu cần tạo (vd 1 để thử bìa)")
     parser.add_argument("--dry-run", action="store_true", help="Đếm text, không gọi API")
     args = parser.parse_args()
+    output_name, voice_label, settings = MODEL_CONFIG[args.model]
     if args.limit is not None and args.limit < 1:
         parser.error("--limit phải lớn hơn 0")
     story = args.story_dir.resolve()
@@ -97,17 +104,17 @@ def main():
             raise ValueError("Lời đọc trống")
     selected = slides[:args.limit] if args.limit else slides
     characters = sum(len(slide["text"]) for slide in selected)
-    print(f"{original['title']}: {len(selected)} trang, {characters} ký tự, model {MODEL}, speed 0.9", flush=True)
+    speed_label = str(settings["speed"]) if "speed" in settings else "tự nhiên (model không hỗ trợ speed)"
+    print(f"{original['title']}: {len(selected)} trang, {characters} ký tự, model {args.model}, speed {speed_label}", flush=True)
     if args.dry_run:
         return
 
     key, voice_id = credentials()
-    output = story / "elevenlabs"
+    output = story / output_name
     output.mkdir(exist_ok=True)
-    settings = {"stability": 0.5, "similarity_boost": 0.75, "speed": 0.9}
     trial = dict(original)
     trial.pop("rate", None)
-    trial.update({"provider": "elevenlabs", "voice": voice_id, "voice_label": "ElevenLabs · Flash v2.5", "model_id": MODEL, "voice_settings": settings})
+    trial.update({"provider": "elevenlabs", "voice": voice_id, "voice_label": voice_label, "model_id": args.model, "voice_settings": settings})
     for name in ["content", "image-prompts-plan.md", *(slide["image"] for slide in slides)]:
         target = output / name
         if not target.exists():
@@ -117,7 +124,7 @@ def main():
     manifest_path = output / "generation.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {"pages": {}}
     for slide in selected:
-        payload = {"text": slide["text"], "model_id": MODEL, "language_code": "vi", "voice_settings": settings}
+        payload = {"text": slide["text"], "model_id": args.model, "language_code": "vi", "voice_settings": settings}
         fingerprint = hashlib.sha256(json.dumps({"voice": voice_id, **payload}, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
         destination = output / slide["audio"]
         record = manifest["pages"].get(slide["audio"])

@@ -17,7 +17,7 @@ Quy trình chuyển từ series `~/work/Shopee-robocar-stories` (Shopee + Roboca
 
 ## Preferences
 - Gen ảnh AI ở **quality low + ảnh ref nhỏ** để tiết kiệm; user rất để ý chi phí token.
-- Giọng đọc đã chốt: ElevenLabs `eleven_flash_v2_5`, tiếng Việt, speed `0.9`; Voice ID/key ở `.env`. `series-config.json` chọn ElevenLabs cho thư viện và deploy. Audio nằm riêng ở `Panda-story-N/elevenlabs/`. Giữ Edge TTS `vi-VN-HoaiMyNeural`, rate `-10%` (venv `~/.venvs/edge-tts`) làm bản dự phòng local.
+- Giọng đọc đã chốt: ElevenLabs `eleven_v4`, tiếng Việt, tốc độ tự nhiên; Voice ID/key ở `.env`. `series-config.json` chọn `elevenlabs-v4` cho thư viện và deploy. Audio nằm riêng ở `Panda-story-N/elevenlabs-v4/`. Giữ Flash v2.5 speed `0.9` trong `elevenlabs/` và Edge TTS `vi-VN-HoaiMyNeural`, rate `-10%` (venv `~/.venvs/edge-tts`) làm bản dự phòng local.
 - Lỗi gen ảnh lặp lại → cập nhật `SKILL.md` (HARD RULES), không chỉ vá từng truyện.
 - Không ghi "Paw Patrol"/"Nickelodeon" trong prompt ảnh (dễ bị ChatGPT chặn bản quyền).
 

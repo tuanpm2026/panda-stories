@@ -1,6 +1,6 @@
 ---
 name: panda-story-slideshow
-description: Build HTML slideshow with Vietnamese TTS voice for a story in the Panda-stories series. Auto-trigger when the user asks to make slideshow/slide/voice/audio/giọng đọc/đọc truyện/thuyết minh for a `Panda-story-N/` folder, or wants an index.html that reads the story aloud over the page images. Reads `content` + `image-prompts-plan.md`, writes `narration.json`, gens `audio/*.mp3` via edge-tts (voice HoaiMy), builds self-contained `index.html` from template. Skill is project-local for the Panda-stories series only.
+description: Build HTML slideshow with Vietnamese TTS voice for a story in the Panda-stories series. Auto-trigger when the user asks to make slideshow/slide/voice/audio/giọng đọc/đọc truyện/thuyết minh for a `Panda-story-N/` folder, or wants an index.html that reads the story aloud over the page images. Reads `content` + `image-prompts-plan.md`, writes `narration.json`, generates separate model audio via ElevenLabs v4 by default, and builds self-contained `index.html` from template. Keeps Flash and Edge voice backups. Skill is project-local for the Panda-stories series only.
 ---
 
 # Panda Story → HTML Slideshow + Voice
@@ -13,7 +13,7 @@ Tạo slideshow HTML tự chứa (ảnh + giọng đọc tiếng Việt) cho m�
 content + image-prompts-plan.md
         │  (bước 1 — bước duy nhất cần suy nghĩ)
         ▼
-narration.json ──(bước 2: tools/gen_story_audio.py)──► audio/*.mp3
+narration.json ──(bước 2: tools/gen_story_audio_elevenlabs.py)──► elevenlabs-v4/audio/*.mp3
         │
         └──(bước 3: tools/build_story_slideshow.py)──► index.html
 ```
@@ -51,10 +51,19 @@ Schema:
 3. **Lời thoại dạng kịch bản phải chuyển thành văn kể:** `Ryder: "..."` → `Ryder dặn: "..."` / `Panda đáp:` / `Mẹ hốt hoảng:` — chọn động từ theo ngữ cảnh. TTS đọc liền mạch, không đọc tên nhân vật khô khan.
 4. **Danh sách bài học đọc bằng chữ số đếm tiếng Việt:** "Một, … Hai, … Ba, …" (không dùng "1." — TTS có thể đọc thành "một chấm").
 5. **Mỗi slide một đoạn text trọn vẹn** — người nghe hiểu được khi chỉ nghe trang đó. Trang quá dài (>~60s đọc) thì cân nhắc cắt bớt mô tả phụ, giữ thoại chính.
-6. **Giọng thư viện đã chốt: ElevenLabs `eleven_flash_v2_5`, tiếng Việt, speed `0.9`**, chọn theo `series-config.json` và Voice ID ở `.env`. Các narration/audio gốc vẫn giữ `vi-VN-HoaiMyNeural`, rate `-10%` làm dự phòng local; không ghi đè chúng khi tạo ElevenLabs.
+6. **Giọng thư viện đã chốt: ElevenLabs `eleven_v4`, tiếng Việt, tốc độ tự nhiên**, chọn theo `series-config.json` và Voice ID ở `.env`. Giữ Flash v2.5 speed `0.9` trong `elevenlabs/` và narration/audio gốc `vi-VN-HoaiMyNeural`, rate `-10%` làm dự phòng local; không ghi đè chúng khi tạo v4.
 7. Tên nhân vật tiếng Anh (tên các cún Paw Patrol, Ryder…): để nguyên lần đầu; nếu user phàn nàn cách phát âm thì phiên âm trong `text` (vd "Rai-đơ") — lưu ý text này cũng là caption hiển thị, nên chỉ phiên âm khi user yêu cầu.
 
-## Bước 2 — Gen audio
+## Bước 2 — Gen audio v4 (mặc định)
+
+```bash
+python3 tools/gen_story_audio_elevenlabs.py Panda-story-N
+python3 tools/validate_series.py Panda-story-N/elevenlabs-v4
+```
+
+Script giữ lời đọc và ảnh, tạo audio + narration + slideshow riêng trong `elevenlabs-v4/`. Trang thành công được tái sử dụng, không tự retry request có thể đã tính credit. Thư viện local/public dùng `series-config.json` để chọn model.
+
+### Edge TTS — chỉ khi user muốn bản dự phòng
 
 ```bash
 ~/.venvs/edge-tts/bin/python tools/gen_story_audio.py Panda-story-N
@@ -72,20 +81,21 @@ Mọi file phải ra duration > 0. File hỏng → xoá rồi chạy lại scrip
 
 ### Thử ElevenLabs khi user yêu cầu
 
-- Giữ Edge TTS/HoaiMy làm dự phòng. Bản ElevenLabs nằm riêng ở `Panda-story-N/elevenlabs/`; không ghi đè lời đọc, audio hay slideshow gốc.
+- Giữ Flash v2.5 và Edge TTS/HoaiMy làm dự phòng. Bản v4 nằm riêng ở `Panda-story-N/elevenlabs-v4/`; không ghi đè lời đọc, audio hay slideshow gốc.
 - Đọc `ELEVENLABS_API_KEY` và `ELEVENLABS_VOICE_ID` từ `.env` ở root hoặc environment; không in key, không commit `.env`.
-- Dùng `python3 tools/gen_story_audio_elevenlabs.py Panda-story-N --dry-run` để đếm lời đọc trước. Model thử: `eleven_flash_v2_5`, `language_code=vi`, speed `0.9`.
+- Dùng `python3 tools/gen_story_audio_elevenlabs.py Panda-story-N --dry-run` để đếm lời đọc trước. Model mặc định: `eleven_v4`, `language_code=vi`, tốc độ tự nhiên. v4 chỉ gửi Stability/Similarity, không gửi Speed/Style/Speaker Boost. `--model eleven_flash_v2_5` tạo hoặc chạy tiếp bản Flash riêng.
 - Khi user đã yêu cầu tạo bản thử, chạy `--limit 1` trước để kiểm tra giọng có dùng được qua API, rồi chạy không có `--limit` để tạo đủ truyện. Trang thành công được giữ lại; script không tự retry request trả phí.
 - Gói Free có thể bị chặn khi dùng giọng Voice Library qua API (`paid_plan_required`). Báo rõ lỗi thực tế và để user chọn giọng khác hoặc cách tiếp tục; không tự đổi giọng đã chọn.
-- `elevenlabs/generation.json` ghi fingerprint cấu hình, trạng thái và request ID. Request `pending` phải kiểm tra History trước khi thử lại vì có thể đã tính credit; không xoá manifest để retry mù.
-- Script kiểm tra MP3 bằng `ffprobe`, liên kết ảnh local và dùng `tools/build_story_slideshow.py` để tạo bản thử. Có thể kiểm tra bằng `python3 tools/validate_series.py Panda-story-N/elevenlabs`.
+- `generation.json` trong mỗi thư mục model ghi fingerprint cấu hình, trạng thái và request ID. Request `pending` phải kiểm tra History trước khi thử lại vì có thể đã tính credit; không xoá manifest để retry mù.
+- Script kiểm tra MP3 bằng `ffprobe`, liên kết ảnh local và dùng `tools/build_story_slideshow.py` để tạo slideshow. Có thể kiểm tra bằng `python3 tools/validate_series.py Panda-story-N/elevenlabs-v4`.
 - Quyền đọc `user_read`/`voices_read` giúp kiểm tra quota/tên giọng, nhưng không bắt buộc để tạo audio nếu đã biết Voice ID và key có quyền Text to Speech. Không đưa bản thử lên `docs/` hay remote khi user chưa duyệt.
-- User đã chốt ElevenLabs cho toàn bộ series: `series-config.json` chọn `elevenlabs`. `tools/build_webapp.py --deploy` đọc narration ElevenLabs và xuất audio sang đường dẫn `elevenlabs/audio/` để browser không dùng cache MP3 Hoài My. Lời đọc và ảnh giữ như bản gốc. `--narration edge` là lựa chọn quay lại bản dự phòng.
+- User đã chốt v4 cho toàn bộ series: `series-config.json` chọn `elevenlabs-v4`. `tools/build_webapp.py --deploy` đọc narration v4 và xuất audio sang đường dẫn `elevenlabs-v4/audio/` để browser không dùng cache MP3 cũ. Lời đọc và ảnh giữ như bản gốc. `--narration elevenlabs` dùng lại Flash, `--narration edge` dùng Hoài My.
+- Khi so sánh các model, giữ cùng Voice ID và lời đọc. Ghi rõ v4 đọc ở tốc độ tự nhiên còn Flash v2.5 dùng `0.9`; không tự thêm audio tags khi mục tiêu là so sánh cùng nội dung.
 
 ## Bước 3 — Build index.html
 
 ```bash
-python3 tools/build_story_slideshow.py Panda-story-N
+python3 tools/build_story_slideshow.py Panda-story-N/elevenlabs-v4
 ```
 
 - **KHÔNG viết tay index.html** — template duy nhất ở `tools/slideshow_template.html` (sửa giao diện thì sửa template rồi rebuild các truyện).
@@ -95,7 +105,7 @@ python3 tools/build_story_slideshow.py Panda-story-N
 ## Bước 4 — Nghiệm thu
 
 ```bash
-open Panda-story-N/index.html
+open Panda-story-N/elevenlabs-v4/index.html
 ```
 
 Nhắc user kiểm tra: (1) bấm "Bắt đầu đọc truyện" → audio chạy + tự lật trang khi đọc xong; (2) giọng đọc tên riêng có ổn không; (3) nút Aa ẩn/hiện caption; (4) tap mép trái/phải lật trang.

@@ -452,6 +452,9 @@ applyHash();
 
 
 def load_stories(narration_variant="edge"):
+    if narration_variant not in ("edge", "elevenlabs", "elevenlabs-v4"):
+        raise ValueError(f"Unknown narration variant: {narration_variant}")
+    use_elevenlabs = narration_variant != "edge"
     stories = []
     dirs = sorted(
         glob.glob(os.path.join(ROOT, "Panda-story-*")),
@@ -463,18 +466,18 @@ def load_stories(narration_variant="edge"):
         m = re.search(r"Panda-story-(\d+)$", d)
         if not m:
             continue
-        source = os.path.join(d, "elevenlabs") if narration_variant == "elevenlabs" else d
+        source = os.path.join(d, narration_variant) if use_elevenlabs else d
         nj = os.path.join(source, "narration.json")
         if not os.path.exists(nj):
-            if narration_variant == "elevenlabs":
+            if use_elevenlabs:
                 raise FileNotFoundError(f"Missing ElevenLabs narration: {nj}")
             continue
         with open(nj, encoding="utf-8") as f:
             data = json.load(f)
         slides = [dict(slide) for slide in data.get("slides", [])]
         for slide in slides:
-            if narration_variant == "elevenlabs":
-                slide["audio"] = "elevenlabs/" + slide["audio"]
+            if use_elevenlabs:
+                slide["audio"] = narration_variant + "/" + slide["audio"]
             for key in ("image", "audio"):
                 path = slide[key]
                 if os.path.isabs(path) or ".." in path.split("/"):
@@ -567,7 +570,7 @@ if __name__ == "__main__":
             config = json.load(f)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--deploy", action="store_true")
-    parser.add_argument("--narration", choices=("edge", "elevenlabs"),
+    parser.add_argument("--narration", choices=("edge", "elevenlabs", "elevenlabs-v4"),
                         default=config.get("narration", "edge"))
     args = parser.parse_args()
     stories = load_stories(args.narration)
