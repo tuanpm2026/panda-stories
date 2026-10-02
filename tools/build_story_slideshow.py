@@ -26,7 +26,7 @@ def main() -> None:
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
     slides = plan["slides"]
     voice = plan.get("voice", "vi-VN-HoaiMyNeural")
-    voice_label = voice.replace("vi-VN-", "").removesuffix("Neural")
+    voice_label = plan.get("voice_label") or voice.replace("vi-VN-", "").removesuffix("Neural")
 
     template = (Path(__file__).parent / "slideshow_template.html").read_text(encoding="utf-8")
     html = (

@@ -9,7 +9,7 @@ Originals are never modified. The deploy build writes a self-contained copy
 under docs/ (index.html + per-story WebP images + copied audio) so you can keep
 the full-resolution PNGs for printing.
 """
-import json, os, glob, re, shutil, subprocess, sys
+import argparse, json, os, glob, re, shutil, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WEBP_QUALITY = "82"
@@ -451,7 +451,7 @@ applyHash();
 """
 
 
-def load_stories():
+def load_stories(narration_variant="edge"):
     stories = []
     dirs = sorted(
         glob.glob(os.path.join(ROOT, "Panda-story-*")),
@@ -463,16 +463,29 @@ def load_stories():
         m = re.search(r"Panda-story-(\d+)$", d)
         if not m:
             continue
-        nj = os.path.join(d, "narration.json")
+        source = os.path.join(d, "elevenlabs") if narration_variant == "elevenlabs" else d
+        nj = os.path.join(source, "narration.json")
         if not os.path.exists(nj):
+            if narration_variant == "elevenlabs":
+                raise FileNotFoundError(f"Missing ElevenLabs narration: {nj}")
             continue
         with open(nj, encoding="utf-8") as f:
             data = json.load(f)
+        slides = [dict(slide) for slide in data.get("slides", [])]
+        for slide in slides:
+            if narration_variant == "elevenlabs":
+                slide["audio"] = "elevenlabs/" + slide["audio"]
+            for key in ("image", "audio"):
+                path = slide[key]
+                if os.path.isabs(path) or ".." in path.split("/"):
+                    raise ValueError(f"Invalid {key} path: {path}")
+                if not os.path.isfile(os.path.join(d, path)) or os.path.getsize(os.path.join(d, path)) == 0:
+                    raise FileNotFoundError(f"Missing or empty asset: {os.path.join(d, path)}")
         stories.append({
             "n": int(m.group(1)),
             "title": data.get("title", "Truyện " + m.group(1)),
             "base": os.path.basename(d),
-            "slides": data.get("slides", []),
+            "slides": slides,
         })
     return stories
 
@@ -528,11 +541,12 @@ def build_deploy(stories):
             total_webp += os.path.getsize(dst)
             converted += 1
 
-        # copy audio as-is (mp3 already compressed)
-        src_audio = os.path.join(src_dir, "audio")
-        if os.path.isdir(src_audio):
-            dst_audio = os.path.join(dst_dir, "audio")
-            shutil.copytree(src_audio, dst_audio, dirs_exist_ok=True)
+        # Copy only the narration assets selected for this build.
+        # Keep the ElevenLabs path distinct so existing browser caches use new audio.
+        for audio in sorted({s["audio"] for s in st["slides"]}):
+            dst_audio = os.path.join(dst_dir, audio)
+            os.makedirs(os.path.dirname(dst_audio), exist_ok=True)
+            shutil.copy2(os.path.join(src_dir, audio), dst_audio)
 
     size = write_html(stories, os.path.join(docs, "index.html"),
                       cover="cover.png", img_ext_map=to_webp)
@@ -546,9 +560,19 @@ def build_deploy(stories):
 
 
 if __name__ == "__main__":
-    stories = load_stories()
+    config_path = os.path.join(ROOT, "series-config.json")
+    config = {}
+    if os.path.exists(config_path):
+        with open(config_path, encoding="utf-8") as f:
+            config = json.load(f)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--deploy", action="store_true")
+    parser.add_argument("--narration", choices=("edge", "elevenlabs"),
+                        default=config.get("narration", "edge"))
+    args = parser.parse_args()
+    stories = load_stories(args.narration)
     build_local(stories)
-    if "--deploy" in sys.argv:
+    if args.deploy:
         build_deploy(stories)
     else:
         print("(run with --deploy to also build the optimized docs/ folder)")

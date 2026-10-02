@@ -51,7 +51,7 @@ Schema:
 3. **Lời thoại dạng kịch bản phải chuyển thành văn kể:** `Ryder: "..."` → `Ryder dặn: "..."` / `Panda đáp:` / `Mẹ hốt hoảng:` — chọn động từ theo ngữ cảnh. TTS đọc liền mạch, không đọc tên nhân vật khô khan.
 4. **Danh sách bài học đọc bằng chữ số đếm tiếng Việt:** "Một, … Hai, … Ba, …" (không dùng "1." — TTS có thể đọc thành "một chấm").
 5. **Mỗi slide một đoạn text trọn vẹn** — người nghe hiểu được khi chỉ nghe trang đó. Trang quá dài (>~60s đọc) thì cân nhắc cắt bớt mô tả phụ, giữ thoại chính.
-6. **Voice mặc định `vi-VN-HoaiMyNeural`, rate `-10%`** (user đã chốt giọng nữ HoaiMy, đọc chậm cho bé). Giọng nam thay thế: `vi-VN-NamMinhNeural`.
+6. **Giọng thư viện đã chốt: ElevenLabs `eleven_flash_v2_5`, tiếng Việt, speed `0.9`**, chọn theo `series-config.json` và Voice ID ở `.env`. Các narration/audio gốc vẫn giữ `vi-VN-HoaiMyNeural`, rate `-10%` làm dự phòng local; không ghi đè chúng khi tạo ElevenLabs.
 7. Tên nhân vật tiếng Anh (tên các cún Paw Patrol, Ryder…): để nguyên lần đầu; nếu user phàn nàn cách phát âm thì phiên âm trong `text` (vd "Rai-đơ") — lưu ý text này cũng là caption hiển thị, nên chỉ phiên âm khi user yêu cầu.
 
 ## Bước 2 — Gen audio
@@ -69,6 +69,18 @@ for f in Panda-story-N/audio/*.mp3; do ffprobe -v error -show_entries format=dur
 ```
 
 Mọi file phải ra duration > 0. File hỏng → xoá rồi chạy lại script.
+
+### Thử ElevenLabs khi user yêu cầu
+
+- Giữ Edge TTS/HoaiMy làm dự phòng. Bản ElevenLabs nằm riêng ở `Panda-story-N/elevenlabs/`; không ghi đè lời đọc, audio hay slideshow gốc.
+- Đọc `ELEVENLABS_API_KEY` và `ELEVENLABS_VOICE_ID` từ `.env` ở root hoặc environment; không in key, không commit `.env`.
+- Dùng `python3 tools/gen_story_audio_elevenlabs.py Panda-story-N --dry-run` để đếm lời đọc trước. Model thử: `eleven_flash_v2_5`, `language_code=vi`, speed `0.9`.
+- Khi user đã yêu cầu tạo bản thử, chạy `--limit 1` trước để kiểm tra giọng có dùng được qua API, rồi chạy không có `--limit` để tạo đủ truyện. Trang thành công được giữ lại; script không tự retry request trả phí.
+- Gói Free có thể bị chặn khi dùng giọng Voice Library qua API (`paid_plan_required`). Báo rõ lỗi thực tế và để user chọn giọng khác hoặc cách tiếp tục; không tự đổi giọng đã chọn.
+- `elevenlabs/generation.json` ghi fingerprint cấu hình, trạng thái và request ID. Request `pending` phải kiểm tra History trước khi thử lại vì có thể đã tính credit; không xoá manifest để retry mù.
+- Script kiểm tra MP3 bằng `ffprobe`, liên kết ảnh local và dùng `tools/build_story_slideshow.py` để tạo bản thử. Có thể kiểm tra bằng `python3 tools/validate_series.py Panda-story-N/elevenlabs`.
+- Quyền đọc `user_read`/`voices_read` giúp kiểm tra quota/tên giọng, nhưng không bắt buộc để tạo audio nếu đã biết Voice ID và key có quyền Text to Speech. Không đưa bản thử lên `docs/` hay remote khi user chưa duyệt.
+- User đã chốt ElevenLabs cho toàn bộ series: `series-config.json` chọn `elevenlabs`. `tools/build_webapp.py --deploy` đọc narration ElevenLabs và xuất audio sang đường dẫn `elevenlabs/audio/` để browser không dùng cache MP3 Hoài My. Lời đọc và ảnh giữ như bản gốc. `--narration edge` là lựa chọn quay lại bản dự phòng.
 
 ## Bước 3 — Build index.html
 
